@@ -11,7 +11,7 @@ import {
 import { User } from './user.entity';
 
 @Entity()
-@Unique(['user_id', 'download_date'])
+@Unique(['download_date'])
 export class UserDownload {
   @PrimaryGeneratedColumn()
   id: number;

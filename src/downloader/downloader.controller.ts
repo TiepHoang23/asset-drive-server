@@ -1,10 +1,10 @@
 import {
   Controller,
-  Get,
-  Query,
   Res,
   HttpException,
   HttpStatus,
+  Post,
+  Body,
   // UseGuards,
 } from '@nestjs/common';
 import { DownloaderService } from './downloader.service';
@@ -15,16 +15,17 @@ import { StrategyType } from 'src/common/utils/types';
 export class DownloaderController {
   constructor(private readonly downloaderService: DownloaderService) {}
 
-  @Get('download')
+  @Post('download-file')
   // @UseGuards()
   async downloadFile(
-    @Query('url') url: string,
-    @Query('strategyType') strategyType: StrategyType,
+    @Body() body: { url: string; strategyType: StrategyType },
     @Res() res: Response,
   ) {
+    const { url, strategyType } = body;
+
     if (!url || !strategyType) {
       throw new HttpException(
-        'URL and strategyType query parameters are required',
+        'URL and strategyType are required',
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -49,16 +50,16 @@ export class DownloaderController {
     }
   }
 
-  @Get('get-link-download')
-  // @UseGuards()
+  @Post('get-link-download')
   async getLinkDownload(
-    @Query('url') url: string,
-    @Query('strategyType') strategyType: StrategyType,
+    @Body() body: { url: string; strategyType: StrategyType },
     @Res() res: Response,
   ) {
+    const { url, strategyType } = body;
+
     if (!url || !strategyType) {
       throw new HttpException(
-        'URL and strategyType query parameters are required',
+        'URL and strategyType are required in the request body',
         HttpStatus.BAD_REQUEST,
       );
     }

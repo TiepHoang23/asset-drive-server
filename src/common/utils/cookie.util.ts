@@ -1,9 +1,10 @@
 import { parse as cookieParse } from 'cookie-parse';
 import { existsSync, readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { COOKIE_FILE } from './constants';
+import axiosInstance from '../interceptors/axios.interceptor';
 // Updated import for consistency
-import { parse as setCookieParse, Cookie } from 'set-cookie-parser';
-import axios from 'axios';
+// import { parse as setCookieParse, Cookie } from 'set-cookie-parser';
+// import axios from 'axios';
 
 export async function setCookie(cookieHeader: string): Promise<string> {
   try {
@@ -45,17 +46,17 @@ export function getSavedCookie(): Record<string, string> | null {
 
 export async function checkAndRefreshCookie(url: string): Promise<void> {
   try {
-    const response = await axios.get(url);
-    const setCookies = setCookieParse(response.headers['set-cookie'] || []);
+    const response = await axiosInstance.get(url);
+    // const setCookies = setCookieParse(response.headers['set-cookie'] || []);
 
-    const savedCookies = getSavedCookie() || {};
-    setCookies.forEach((cookie: Cookie) => {
-      savedCookies[cookie.name] = cookie.value;
-    });
+    // const savedCookies = getSavedCookie() || {};
+    // setCookies.forEach((cookie: Cookie) => {
+    //   savedCookies[cookie.name] = cookie.value;
+    // });
 
-    saveCookie(savedCookies);
+    // saveCookie(savedCookies);
   } catch (error) {
-    console.error('Failed to refresh cookie:', error);
+    console.error('Failed to refresh cookie:', error.message);
     throw new Error('Failed to refresh cookie');
   }
 }

@@ -16,8 +16,8 @@ export class FreepikStrategy {
   ): Promise<{ filename: string; fileBase64: string }> {
     const fileId = this.extractFileId(url);
 
-    await checkAndRefreshCookie(url);
     const downloadUrl = this.buildDownloadUrl(fileId);
+    await checkAndRefreshCookie(downloadUrl);
     const file = await this.getFileBase64(downloadUrl);
 
     if (!file) {
@@ -28,9 +28,10 @@ export class FreepikStrategy {
   }
 
   public async getLinkDownload(url: string): Promise<string> {
-    await checkAndRefreshCookie(url);
     const fileId = this.extractFileId(url);
     const downloadUrl = this.buildDownloadUrl(fileId);
+    await checkAndRefreshCookie(downloadUrl);
+
     return downloadUrl;
   }
 
